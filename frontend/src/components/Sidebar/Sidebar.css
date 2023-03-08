@@ -1,0 +1,11 @@
+.sidebar {
+  min-height: 95vh;
+  min-width: 15vw;
+  background-color: var(--sidebar-background-color);
+  box-shadow: 0 1px 0 0 var(--sidebar-shadow-color);
+  color: var(--sidebar-text-color);
+}
+
+.subsection {
+  border-top: 1px solid var(--sidebar-shadow-color);
+}
