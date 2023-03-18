@@ -2,3 +2,10 @@
   display: flex;
   flex-direction: column-reverse;
 }
+
+.text-message {
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+  background: var(--sidebar-background-color);
+}
