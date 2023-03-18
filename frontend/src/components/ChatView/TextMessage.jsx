@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 
 function TextMessage({ message, user }) {
   const className = (user === message.user
-    ? 'text-message text-message-user'
-    : 'text-message text-message-other'
+    ? 'text-message-container text-message-container-user'
+    : 'text-message-container text-message-container-other'
   );
   return (
     <div className={className}>
-      {message.text}
+      <div />
+      <div className="text-message">
+        {message.text}
+      </div>
     </div>
   );
 }

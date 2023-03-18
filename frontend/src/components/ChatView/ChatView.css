@@ -6,14 +6,21 @@
 .text-message {
   border-radius: 5px;
   border: 1px solid grey;
-  margin: 5px;
   padding: 5px;
+  background-color: var(--message-color);
 }
 
-.text-message-user {
-  background-color: var(--sidebar-background-color);
+.text-message-container {
+  display: flex;
+  margin: 5px 15px;
 }
 
-.text-message-other {
-  background-color: transparent;
+.text-message-container-user {
+  flex-direction: row-reverse;
+  --message-color: var(--sidebar-background-color);
+  text-align: right;
+}
+
+.text-message-container-other {
+  --message-color: transparent;
 }
