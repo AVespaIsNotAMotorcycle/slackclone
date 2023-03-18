@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Sidebar.css';
 
 function ServerName() {
@@ -20,28 +21,44 @@ function ChatOptions() {
   );
 }
 
-function ChatList() {
+function ChatList({ channels, setChannel }) {
   return (
     <div className="subsection">
       Channels
       <ul>
-        <li># frontend</li>
-        <li># backend</li>
-        <li># bugs</li>
-        <li># general</li>
+        {channels.map((channel) => (
+          <li>
+            <button type="button" onClick={() => { setChannel(channel); }}>
+              {channel}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
-function Sidebar() {
+ChatList.propTypes = {
+  channels: PropTypes.instanceOf(Array).isRequired,
+  setChannel: PropTypes.func.isRequired,
+};
+
+function Sidebar({ channels, setChannel }) {
   return (
     <div className="sidebar">
       <ServerName />
       <ChatOptions />
-      <ChatList />
+      <ChatList
+        channels={channels}
+        setChannel={setChannel}
+      />
     </div>
   );
 }
 
 export default Sidebar;
+
+Sidebar.propTypes = {
+  channels: PropTypes.instanceOf(Array).isRequired,
+  setChannel: PropTypes.func.isRequired,
+};

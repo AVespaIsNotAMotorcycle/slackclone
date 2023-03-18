@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ChatView from '../ChatView';
 import Header from '../Header';
@@ -10,27 +10,39 @@ const SERVER = {
   frontend: {
     users: [],
     chat: [
-      { text: 'Test Message A' },
-      { text: 'Test Message B' },
+      { text: 'Test frontend message A' },
+      { text: 'Test frontend message B' },
     ],
-  }
+  },
+  backend: {
+    user: [],
+    chat: [
+      { text: 'Test backend message A' },
+    ],
+  },
 };
 
 function App() {
-  const [channel] = useState('frontend');
+  const [channel, setChannel] = useState('frontend');
   const [chat, setChat] = useState(SERVER[channel].chat);
 
   const sendMessage = (text) => {
     const nChat = [...chat];
     nChat.push({ text });
     setChat(nChat);
+    SERVER[channel].chat = nChat;
   };
+
+  useEffect(() => { setChat(SERVER[channel].chat); }, [channel]);
 
   return (
     <div className="app">
       <Header />
       <div className="content">
-        <Sidebar />
+        <Sidebar
+          channels={Object.keys(SERVER)}
+          setChannel={setChannel}
+        />
         <ChatView
           chat={chat}
           sendMessage={sendMessage}
