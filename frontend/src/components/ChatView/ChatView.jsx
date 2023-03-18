@@ -5,15 +5,17 @@ import './ChatView.css';
 import TextInput from './TextInput';
 import TextMessage from './TextMessage';
 
-function generateMessages(chat) {
-  return chat.map((message) => <TextMessage text={message.text} />);
+function generateMessages(chat, user) {
+  return chat.map((message) => {
+    return <TextMessage message={message} user={user} />;
+  });
 }
 
-function ChatView({ chat, sendMessage }) {
-  const [messages, setMessages] = useState(generateMessages(chat));
+function ChatView({ chat, sendMessage, user }) {
+  const [messages, setMessages] = useState(generateMessages(chat, user));
 
   useEffect(() => {
-    setMessages(generateMessages(chat));
+    setMessages(generateMessages(chat, user));
   }, [chat.length]);
 
   return (
@@ -33,6 +35,7 @@ export default ChatView;
 ChatView.propTypes = {
   chat: PropTypes.instanceOf(Array),
   sendMessage: PropTypes.func,
+  user: PropTypes.string.isRequired,
 };
 
 ChatView.defaultProps = {

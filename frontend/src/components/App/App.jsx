@@ -10,14 +10,14 @@ const SERVER = {
   frontend: {
     users: [],
     chat: [
-      { text: 'Test frontend message A' },
-      { text: 'Test frontend message B' },
+      { user: 'userA', text: 'Test frontend message A' },
+      { user: 'userB', text: 'Test frontend message B' },
     ],
   },
   backend: {
     user: [],
     chat: [
-      { text: 'Test backend message A' },
+      { user: 'userC', text: 'Test backend message A' },
     ],
   },
 };
@@ -25,10 +25,11 @@ const SERVER = {
 function App() {
   const [channel, setChannel] = useState('frontend');
   const [chat, setChat] = useState(SERVER[channel].chat);
+  const [user] = useState('localUser');
 
   const sendMessage = (text) => {
     const nChat = [...chat];
-    nChat.push({ text });
+    nChat.push({ user, text });
     setChat(nChat);
     SERVER[channel].chat = nChat;
   };
@@ -46,6 +47,7 @@ function App() {
         <ChatView
           chat={chat}
           sendMessage={sendMessage}
+          user={user}
         />
       </div>
     </div>

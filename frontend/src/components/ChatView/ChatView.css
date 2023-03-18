@@ -5,7 +5,15 @@
 
 .text-message {
   border-radius: 5px;
+  border: 1px solid grey;
   margin: 5px;
   padding: 5px;
-  background: var(--sidebar-background-color);
+}
+
+.text-message-user {
+  background-color: var(--sidebar-background-color);
+}
+
+.text-message-other {
+  background-color: transparent;
 }
