@@ -5,7 +5,6 @@ function TextInput({ onSubmit }) {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
-    console.log(text);
     onSubmit(text);
     setText('');
   };

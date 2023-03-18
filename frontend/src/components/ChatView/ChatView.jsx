@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import './ChatView.css';
 
 import TextInput from './TextInput';
 import TextMessage from './TextMessage';
 
 function generateMessages(chat) {
-  return chat.map((text) => <TextMessage text={text} />);
+  return chat.map((message) => <TextMessage text={message.text} />);
 }
 
-function ChatView() {
-  const [chat, setChat] = useState([]);
+function ChatView({ chat, sendMessage }) {
   const [messages, setMessages] = useState(generateMessages(chat));
-
-  const sendMessage = (text) => {
-    const nChat = [...chat];
-    nChat.push(text);
-    setChat(nChat);
-  }
 
   useEffect(() => {
     setMessages(generateMessages(chat));
@@ -35,3 +29,13 @@ function ChatView() {
 }
 
 export default ChatView;
+
+ChatView.propTypes = {
+  chat: PropTypes.instanceOf(Array),
+  sendMessage: PropTypes.func,
+};
+
+ChatView.defaultProps = {
+  chat: [],
+  sendMessage: () => {},
+}
