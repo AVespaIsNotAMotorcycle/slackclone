@@ -9,8 +9,11 @@ function TextMessage({ message, user }) {
   return (
     <div className={className}>
       <div />
-      <div className="text-message">
-        {message.text}
+      <div>
+        <div className="text-message">
+          {message.text}
+        </div>
+        {message.user}
       </div>
     </div>
   );
