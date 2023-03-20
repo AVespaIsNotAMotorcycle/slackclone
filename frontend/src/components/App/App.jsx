@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 import ChatView from '../ChatView';
 import Header from '../Header';
@@ -22,44 +23,44 @@ const SERVER = {
   },
 };
 
-function mockResponse(channel, sendMessage) {
-  const getRandomInt = (max) => {
-    return Math.floor(Math.random() * max);
-  };
-  const willRespond = getRandomInt(2);
-  if (!willRespond) { return; }
-  const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque venenatis cursus nulla rhoncus dignissim. In facilisis, erat sit amet elementum tempus, velit tortor pellentesque odio, et accumsan mi nulla id massa. Sed iaculis neque odio. Duis luctus lectus vel ornare tempor. Nam in molestie lorem, sed placerat ipsum. Fusce condimentum ultrices feugiat. Fusce maximus dui ex, non tincidunt nunc convallis in.'.split(' ');
-  const words = lorem.length;
-  const sender = 'userC';
-  sendMessage(lorem.slice(getRandomInt(words)).join(' '), sender);
-};
+function fetchServer() {
+  return new Promise((resolve, reject) => {
+    axios.get('http://localhost:5000/server/test_server')
+      .then((resp) => { resolve(resp.data); })
+      .catch((err) => { reject(err); });
+  });
+}
 
 function App() {
-  const [channel, setChannel] = useState('frontend');
-  const [chat, setChat] = useState(SERVER[channel].chat);
+  const [channel, setChannel] = useState('general');
+  const [server, setServer] = useState({});
   const [user] = useState('localUser');
+  const loaded = Object.keys(server).length > 0;
+  const [chat, setChat] = useState([]);
+
+  const updateServer = (newServer) => {
+      setServer(newServer);
+      setChat(newServer[channel].chat);
+  };
 
   const sendMessage = (text, sender = user) => {
     const nChat = [...chat];
     nChat.push({ user: sender, text });
     setChat(nChat);
-    SERVER[channel].chat = nChat;
+    axios.post(`http://localhost:5000/server/test_server/${channel}/${sender}.${text}`)
+      .then((resp) => { updateServer(resp.data); });
   };
 
   useEffect(() => {
-    setChat(SERVER[channel].chat);
-  }, [channel]);
-
-  useEffect(() => {
-    mockResponse(channel, sendMessage);
-  }, [chat.length]);
+    fetchServer().then((newServer) => { updateServer(newServer); });
+  }, []);
 
   return (
     <div className="app">
       <Header />
       <div className="content">
         <Sidebar
-          channels={Object.keys(SERVER)}
+          channels={Object.keys(server)}
           setChannel={setChannel}
         />
         <ChatView
