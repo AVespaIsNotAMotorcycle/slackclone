@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function TextInput({ onSubmit }) {
+function TextInput({ channel, onSubmit }) {
   const [text, setText] = useState('');
 
   const handleSubmit = () => {
-    onSubmit(text);
+    onSubmit(text, channel);
     setText('');
   };
 
@@ -28,5 +28,10 @@ function TextInput({ onSubmit }) {
 export default TextInput;
 
 TextInput.propTypes = {
+  channel: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
+};
+
+TextInput.defaultProps = {
+  channel: '',
 };

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.css';
+
+import ServerContext from '../../utils/ServerContext';
 
 function ServerName() {
   return (
@@ -21,7 +23,8 @@ function ChatOptions() {
   );
 }
 
-function ChatList({ channels, setChannel }) {
+function ChatList({ setChannel }) {
+  const { channels } = useContext(ServerContext);
   return (
     <div className="subsection">
       Channels
@@ -39,17 +42,15 @@ function ChatList({ channels, setChannel }) {
 }
 
 ChatList.propTypes = {
-  channels: PropTypes.instanceOf(Array).isRequired,
   setChannel: PropTypes.func.isRequired,
 };
 
-function Sidebar({ channels, setChannel }) {
+function Sidebar({ setChannel }) {
   return (
     <div className="sidebar">
       <ServerName />
       <ChatOptions />
       <ChatList
-        channels={channels}
         setChannel={setChannel}
       />
     </div>
@@ -59,6 +60,5 @@ function Sidebar({ channels, setChannel }) {
 export default Sidebar;
 
 Sidebar.propTypes = {
-  channels: PropTypes.instanceOf(Array).isRequired,
   setChannel: PropTypes.func.isRequired,
 };
