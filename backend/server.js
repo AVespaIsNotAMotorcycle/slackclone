@@ -8,8 +8,9 @@ app.use(cors({ origin: '*' }));
 
 const SERVERS = {
   test_server: {
+    users: ['sam', 'lorem'],
     general: {
-      users: ['localUser', 'lorem'],
+      users: ['sam', 'lorem'],
       chat: [
         { user: 'lorem', text: 'Welcome to the server!' },
       ],
@@ -29,9 +30,23 @@ app.post('/server/:servername/:channel/:user.:text', (request, response) => {
   response.send(SERVERS[servername])
 });
 
-app.get('/server/:servername', (request, response) => {
-  const servername = request.params.servername;
-  response.send(SERVERS[servername]); 
+app.get('/server/:servername.:user', (request, response) => {
+  const { servername, user } = request.params;
+  const server = SERVERS[servername];
+  if (server.users.includes(user)) {
+    response.send(SERVERS[servername]); 
+  } else {
+    response.send(401);
+  }
+});
+
+const USERS = {
+  sam: 'testpassword',
+};
+app.get('/login/:user.:password', (request, response) => {
+  const { user, password } = request.params;
+  if (USERS[user] === password) { response.send(200); }
+  else { response.send(401); }
 });
 
 app.get('/', (request, response) => {

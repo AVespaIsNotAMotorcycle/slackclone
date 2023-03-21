@@ -9,7 +9,15 @@ const ServerContext = createContext();
 export function ServerContextProvider({ children }) {
   const [server, setServer] = useState({});
   const [channels, setChannels] = useState([]);
-  const [user] = useState('localUser');
+  const [user, setUser] = useState('');
+
+  const login = (username, password) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${BACKEND_HOSTNAME}/login/${username}.${password}`)
+        .then((response) => { setUser(username); resolve(response); })
+        .catch((error) => { reject(error); })
+    });
+  };
 
   const updateServer = (newServer) => {
     setServer(newServer);
@@ -17,8 +25,9 @@ export function ServerContextProvider({ children }) {
   };
 
   const fetchServer = (serverName) => {
+    if (!user) return Promise.reject('no user');
     return new Promise((resolve, reject) => {
-      axios.get(`http://localhost:5000/server/${serverName}`)
+      axios.get(`http://localhost:5000/server/${serverName}.${user}`)
         .then((response) => { updateServer(response.data); })
         .catch((error) => { reject(error); })
     });
@@ -31,13 +40,14 @@ export function ServerContextProvider({ children }) {
      .catch((error) => { console.error(error); });
   };
 
-  useEffect(() => { fetchServer(SERVER_NAME); }, []);
+  useEffect(() => { fetchServer(SERVER_NAME); }, [user]);
 
   const value = {
     channels,
     server,
     sendMessage,
     user,
+    login,
   };
 
   return (

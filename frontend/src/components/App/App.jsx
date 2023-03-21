@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
-import { ServerContextProvider } from '../../utils/ServerContext';
+import ServerContext, { ServerContextProvider } from '../../utils/ServerContext';
 
 import ChatView from '../ChatView';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
+import LogIn from '../LogIn';
 
 import './App.css';
 
-function App() {
+function Content() {
   const [channel, setChannel] = useState('general');
-
+  const { user } = useContext(ServerContext);
+  if (!user) return <LogIn />;
   return (
-    <ServerContextProvider>
       <div className="app">
         <Header />
         <div className="content">
@@ -23,6 +24,13 @@ function App() {
           <ChatView channel={channel} />
         </div>
       </div>
+  );
+}
+
+function App() {
+  return (
+    <ServerContextProvider>
+      <Content />
     </ServerContextProvider>
   );
 }
