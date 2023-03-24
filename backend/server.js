@@ -9,7 +9,7 @@ app.use(express.json());
 
 const SERVERS = {
   test_server: {
-    users: ['sam', 'lorem'],
+    users: ['sam', 'lorem', 'sam2'],
     general: {
       users: ['sam', 'lorem'],
       chat: [
@@ -43,6 +43,7 @@ app.get('/server/:servername', (request, response) => {
 
 const USERS = {
   sam: 'testpassword',
+  sam2: 'testpassword2',
 };
 app.get('/login', (request, response) => {
   const { username, password } = request.query;

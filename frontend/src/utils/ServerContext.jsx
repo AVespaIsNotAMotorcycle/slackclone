@@ -3,6 +3,8 @@ import axios from 'axios';
 
 const BACKEND_HOSTNAME = 'http://localhost:5000';
 const SERVER_NAME = 'test_server';
+const MINIMUM_REFRESH_TIME = 1000;
+const MAXIMUM_REFRESH_TIME = 600000;
 
 const ServerContext = createContext();
 
@@ -10,6 +12,11 @@ export function ServerContextProvider({ children }) {
   const [server, setServer] = useState({});
   const [channels, setChannels] = useState([]);
   const [user, setUser] = useState('');
+  const [refreshTimer, setRefreshTimer] = useState(MINIMUM_REFRESH_TIME);
+
+  useEffect(() => {
+    setTimeout(() => fetchServer('test_server'), refreshTimer);
+  }, [server]);
 
   const login = (username, password) => {
     return new Promise((resolve, reject) => {
@@ -21,6 +28,11 @@ export function ServerContextProvider({ children }) {
   };
 
   const updateServer = (newServer) => {
+    if (JSON.stringify(newServer) !== JSON.stringify(server)) {
+      setRefreshTimer(MINIMUM_REFRESH_TIME);
+    } else if (refreshTimer < MAXIMUM_REFRESH_TIME) {
+      setRefreshTimer(refreshTimer * 1.2);
+    }
     setServer(newServer);
     setChannels(Object.keys(newServer));
   };
