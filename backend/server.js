@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({ origin: '*' }));
+app.use(express.json());
 
 const SERVERS = {
   test_server: {
@@ -18,20 +19,20 @@ const SERVERS = {
   },
 };
 
-app.post('/server/:servername/:channel/:user.:text', (request, response) => {
+app.post('/server/:servername/:channel/', (request, response) => {
   const {
     servername,
     channel,
-    user,
-    text,
   } = request.params;
+  const { user, text } = request.body;
   SERVERS[servername][channel].chat.push({ user, text });
   SERVERS[servername][channel].chat.push({ user: 'lorem', text: generateResponse() });
   response.send(SERVERS[servername])
 });
 
-app.get('/server/:servername.:user', (request, response) => {
-  const { servername, user } = request.params;
+app.get('/server/:servername', (request, response) => {
+  const { servername } = request.params;
+  const { user } = request.query;
   const server = SERVERS[servername];
   if (server.users.includes(user)) {
     response.send(SERVERS[servername]); 
@@ -43,9 +44,9 @@ app.get('/server/:servername.:user', (request, response) => {
 const USERS = {
   sam: 'testpassword',
 };
-app.get('/login/:user.:password', (request, response) => {
-  const { user, password } = request.params;
-  if (USERS[user] === password) { response.send(200); }
+app.get('/login', (request, response) => {
+  const { username, password } = request.query;
+  if (USERS[username] === password) { response.send(200); }
   else { response.send(401); }
 });
 

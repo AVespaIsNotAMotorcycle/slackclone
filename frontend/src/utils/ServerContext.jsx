@@ -13,7 +13,8 @@ export function ServerContextProvider({ children }) {
 
   const login = (username, password) => {
     return new Promise((resolve, reject) => {
-      axios.get(`${BACKEND_HOSTNAME}/login/${username}.${password}`)
+      axios.get(`${BACKEND_HOSTNAME}/login/`,
+      { params: { username, password } })
         .then((response) => { setUser(username); resolve(response); })
         .catch((error) => { reject(error); })
     });
@@ -27,7 +28,8 @@ export function ServerContextProvider({ children }) {
   const fetchServer = (serverName) => {
     if (!user) return Promise.reject('no user');
     return new Promise((resolve, reject) => {
-      axios.get(`http://localhost:5000/server/${serverName}.${user}`)
+      axios.get(`http://localhost:5000/server/${serverName}`,
+      { params: { user } })
         .then((response) => { updateServer(response.data); })
         .catch((error) => { reject(error); })
     });
@@ -35,7 +37,8 @@ export function ServerContextProvider({ children }) {
 
   const sendMessage = (text, channel) => {
     axios.post(
-      `${BACKEND_HOSTNAME}/server/${SERVER_NAME}/${channel}/${user}.${text}`
+      `${BACKEND_HOSTNAME}/server/${SERVER_NAME}/${channel}/`,
+      { user, text },
     ).then((response) => { updateServer(response.data); })
      .catch((error) => { console.error(error); });
   };
