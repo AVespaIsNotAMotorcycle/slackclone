@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import './Sidebar.css';
 
 import ServerContext from '../../utils/ServerContext';
+import { Button } from '../Common';
 
 function ServerName() {
+  const { serverName } = useContext(ServerContext);
   return (
     <div className="subsection">
-      <h1>my server</h1>
+      <h1>{serverName}</h1>
     </div>
   );
 }
@@ -28,15 +30,11 @@ function ChatList({ setChannel }) {
   return (
     <div className="subsection">
       Channels
-      <ul>
-        {channels.map((channel) => (
-          <li>
-            <button type="button" onClick={() => { setChannel(channel); }}>
-              {channel}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {channels.map((channel) => (
+        <Button key={channel} onClick={() => { setChannel(channel); }}>
+          {channel}
+        </Button>
+      ))}
     </div>
   );
 }

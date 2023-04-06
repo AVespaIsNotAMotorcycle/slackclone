@@ -1,6 +1,7 @@
 .sidebar {
   min-height: 95vh;
-  min-width: 15vw;
+  width: fit-content;
+  padding: 0px 10px;
   background-color: var(--sidebar-background-color);
   box-shadow: 0 1px 0 0 var(--sidebar-shadow-color);
   color: var(--sidebar-text-color);
