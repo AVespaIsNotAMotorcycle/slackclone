@@ -10,23 +10,30 @@ app.use(express.json());
 const SERVERS = {
   test_server: {
     users: ['sam', 'lorem', 'sam2'],
-    general: {
-      users: ['sam', 'lorem'],
-      chat: [
-        { user: 'lorem', text: 'Welcome to the server!' },
-      ],
+    channels: {
+      general: {
+        users: ['sam', 'lorem'],
+        chat: [
+          { user: 'lorem', text: 'Welcome to the server!' },
+        ],
+      },
     },
   },
+};
+const USERS = {
+  sam: 'testpassword',
+  sam2: 'testpassword2',
 };
 
 app.post('/server/:servername/:channel/', (request, response) => {
   const {
     servername,
-    channel,
+    channel: channelName,
   } = request.params;
   const { user, text } = request.body;
-  SERVERS[servername][channel].chat.push({ user, text });
-  SERVERS[servername][channel].chat.push({ user: 'lorem', text: generateResponse() });
+  const server = SERVERS[servername];
+  const channel = server.channels[channelName];
+  channel.chat.push({ user, text });
   response.send(SERVERS[servername])
 });
 
@@ -41,13 +48,26 @@ app.get('/server/:servername', (request, response) => {
   }
 });
 
-const USERS = {
-  sam: 'testpassword',
-  sam2: 'testpassword2',
-};
+app.post('/server/create', (request, response) => {
+  const { name, user } = request.body.params;
+  if (!name || Object.keys(SERVERS).includes(name)) throw new Error('invalid name');
+  if (!user || !Object.keys(USERS).includes(user)) throw new Error('invalid user');
+  const newServer = {
+    users: [user],
+    channels: {
+      general: {
+        users: [user],
+        chat: [],
+      },
+    },
+  };
+  SERVERS[name] = newServer;
+  response.send(name);
+});
+
 app.get('/user/login', (request, response) => {
   const { username, password } = request.query;
-  if (USERS[username] === password) { response.send(200); }
+  if (USERS[username] === password) { response.sendStatus(200); }
   else { response.send(401); }
 });
 
@@ -64,7 +84,6 @@ app.post('/user/signup', (request, response) => {
   const { username, password } = request.body.params;
   if (!username || typeof username !== 'string') throw new Error('username is not a truthy string');
   if (!password || typeof password !== 'string') throw new Error('password is not a truthy string');
-  console.log(username, password, USERS[username]);
   if (USERS[username]) response.sendStatus(400);
   else { USERS[username] = password; response.sendStatus(200); }
 });

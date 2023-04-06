@@ -16,8 +16,19 @@ export function ServerContextProvider({ children }) {
   const [refreshTimer, setRefreshTimer] = useState(MINIMUM_REFRESH_TIME);
 
   useEffect(() => {
-    setTimeout(() => fetchServer('test_server'), refreshTimer);
+    if (!user) return;
+    if (!serverName) return;
+    setTimeout(() => fetchServer(serverName), refreshTimer);
   }, [server]);
+
+  const createServer = (name) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${BACKEND_HOSTNAME}/server/create`,
+      { params: { name, user } })
+        .then(() => { console.log('created'); setServerName(name); })
+        .catch((error) => { reject(error); });
+    });
+  };
 
   const getUserServers = (username) => {
     return new Promise((resolve, reject) => {
@@ -56,7 +67,7 @@ export function ServerContextProvider({ children }) {
       setRefreshTimer(refreshTimer * 1.2);
     }
     setServer(newServer);
-    setChannels(Object.keys(newServer));
+    setChannels(Object.keys(newServer.channels));
   };
 
   const fetchServer = (serverName) => {
@@ -71,13 +82,16 @@ export function ServerContextProvider({ children }) {
 
   const sendMessage = (text, channel) => {
     axios.post(
-      `${BACKEND_HOSTNAME}/server/${SERVER_NAME}/${channel}/`,
+      `${BACKEND_HOSTNAME}/server/${serverName}/${channel}/`,
       { user, text },
     ).then((response) => { updateServer(response.data); })
      .catch((error) => { console.error(error); });
   };
 
-  useEffect(() => { fetchServer(serverName); }, [serverName]);
+  useEffect(() => {
+    if (!user) return;
+    fetchServer(serverName);
+  }, [serverName]);
 
   const value = {
     channels,
@@ -89,6 +103,7 @@ export function ServerContextProvider({ children }) {
     getUserServers,
     serverName,
     setServerName,
+    createServer,
   };
 
   return (

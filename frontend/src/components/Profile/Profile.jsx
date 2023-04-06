@@ -11,7 +11,12 @@ import {
 } from '../Common';
 
 function Profile() {
-  const { user, getUserServers, setServerName } = useContext(ServerContext);
+  const {
+    user,
+    getUserServers,
+    setServerName,
+    createServer,
+  } = useContext(ServerContext);
   const [serverList, setServerList] = useState([]);
 
   useEffect(() => {
@@ -34,7 +39,7 @@ function Profile() {
           {serverName}
         </Button>
       ))}
-      <Button>
+      <Button onClick={() => { createServer('new_server'); }}>
         Create Server
       </Button>
     </ContentBox>

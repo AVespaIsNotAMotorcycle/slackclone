@@ -20,13 +20,13 @@ function ChatView({ channel }) {
     user,
   } = useContext(ServerContext);
   const chat = (channels.includes(channel)
-                ? server[channel].chat
+                ? server.channels[channel].chat
                 : []);
   const [messages, setMessages] = useState(generateMessages([], user));
 
   useEffect(() => {
-    if (!server[channel]) { return; }
-    const chat = server[channel].chat;
+    if (!channels.includes(channel)) { return; }
+    const chat = server.channels[channel].chat;
     setMessages(generateMessages(chat, user));
   }, [server]);
 
