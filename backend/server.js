@@ -45,10 +45,19 @@ const USERS = {
   sam: 'testpassword',
   sam2: 'testpassword2',
 };
-app.get('/login', (request, response) => {
+app.get('/user/login', (request, response) => {
   const { username, password } = request.query;
   if (USERS[username] === password) { response.send(200); }
   else { response.send(401); }
+});
+
+app.post('/user/signup', (request, response) => {
+  const { username, password } = request.body.params;
+  if (!username || typeof username !== 'string') throw new Error('username is not a truthy string');
+  if (!password || typeof password !== 'string') throw new Error('password is not a truthy string');
+  console.log(username, password, USERS[username]);
+  if (USERS[username]) response.sendStatus(400);
+  else { USERS[username] = password; response.sendStatus(200); }
 });
 
 app.get('/', (request, response) => {
