@@ -1,8 +1,10 @@
 # slackclone
 
 Feature wish list
-- [ ] make an account
-- [ ] log in
-- [ ] create a server
+- [X] make an account
+- [X] log in
+- [X] create a server
+- [ ] add other users to the server
 - [ ] create a channel
-- [ ] send messages in the server
+- [ ] add other users to the channel
+- [X] send messages in the server
