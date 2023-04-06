@@ -1,5 +1,11 @@
 import { useContext, useState } from 'react';
 import ServerContext from '../../utils/ServerContext';
+
+import {
+  Button,
+  ContentBox,
+  TextField,
+} from '../Common';
 import SignUp from '../SignUp';
 import './LogIn.css';
 
@@ -23,30 +29,31 @@ function LogIn() {
   if (newUser) return <SignUp />;
   return (
     <div className="login-outer">
-      <div className="login-inner">
+      <ContentBox>
         <h1>
           Log In
         </h1>
         {inlineError}
-        <label for="username_input">Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label for="password_input">Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="button" onClick={handleSubmit}>
-          Submit
-        </button>
-      </div>
-      <button type="button" onClick={() => { setNewUser(true); }}>
-        Sign Up
-      </button>
+        <form>
+          <TextField
+            label="Username:"
+            id="login_username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            label="Password:"
+            id="login_password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button variant="filled" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </form>
+        <Button onClick={() => { setNewUser(true); }}>
+          Sign Up
+        </Button>
+      </ContentBox>
     </div>
   );
 }

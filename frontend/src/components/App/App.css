@@ -5,6 +5,9 @@ html {
   --sidebar-background-color: SlateGrey;
   --sidebar-text-color: #ffffff;
   --sidebar-shadow-color: rgba(255,255,255,0.27);
+
+  --button-background-color: DarkSlateGrey;
+  --button-hover-color: DarkCyan;
 }
 
 .content {
