@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import ServerContext from '../../utils/ServerContext';
+import SignUp from '../SignUp';
 import './LogIn.css';
 
 function LogIn() {
@@ -7,6 +8,7 @@ function LogIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [newUser, setNewUser] = useState(false);
 
   const handleSubmit = () => {
     login(username, password)
@@ -18,6 +20,7 @@ function LogIn() {
     ? <div className="inline-error">{error}</div>
     : null
   );
+  if (newUser) return <SignUp />;
   return (
     <div className="login-outer">
       <div className="login-inner">
@@ -41,6 +44,9 @@ function LogIn() {
           Submit
         </button>
       </div>
+      <button type="button" onClick={() => { setNewUser(true); }}>
+        Sign Up
+      </button>
     </div>
   );
 }

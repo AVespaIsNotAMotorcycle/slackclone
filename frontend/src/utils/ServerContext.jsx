@@ -18,9 +18,21 @@ export function ServerContextProvider({ children }) {
     setTimeout(() => fetchServer('test_server'), refreshTimer);
   }, [server]);
 
+  const signup = (username, password) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${BACKEND_HOSTNAME}/user/signup`,
+      { params: { username, password } })
+        .then(({ status }) => {
+          if (status !== 200) reject(status);
+          setUser(username); resolve(status);
+        })
+        .catch((error) => { reject(error); });
+    });
+  };
+
   const login = (username, password) => {
     return new Promise((resolve, reject) => {
-      axios.get(`${BACKEND_HOSTNAME}/login/`,
+      axios.get(`${BACKEND_HOSTNAME}/user/login`,
       { params: { username, password } })
         .then((response) => { setUser(username); resolve(response); })
         .catch((error) => { reject(error); })
@@ -62,6 +74,7 @@ export function ServerContextProvider({ children }) {
     server,
     sendMessage,
     user,
+    signup,
     login,
   };
 
