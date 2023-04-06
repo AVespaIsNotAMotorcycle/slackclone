@@ -8,3 +8,7 @@ Feature wish list
 - [ ] create a channel
 - [ ] add other users to the channel
 - [X] send messages in the server
+
+Infrastructural wish list
+- [ ] adopt an actual db (probably mongodb)
+- [ ] host both back- and frontend
