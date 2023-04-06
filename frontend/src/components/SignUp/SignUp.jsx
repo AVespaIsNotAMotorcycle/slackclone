@@ -1,5 +1,10 @@
 import { useContext, useState } from 'react';
 import ServerContext from '../../utils/ServerContext';
+import {
+  Button,
+  ContentBox,
+  TextField,
+} from '../Common';
 import './SignUp.css';
 
 function LogIn() {
@@ -28,29 +33,28 @@ function LogIn() {
   );
   return (
     <div className="login-outer">
-      <div className="login-inner">
+      <ContentBox>
         <h1>
           Sign Up
         </h1>
         {inlineError}
-        <div>
-          <label for="username_input">Username:</label>
-          <input
-            type="text"
-            value={username}
+        <form>
+          <TextField
+            label="Username:"
+            id="signup_username"
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label for="password_input">Password:</label>
-          <input
+          <TextField
+            label="Password:"
+            id="signup_password"
             type="password"
-            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="button" onClick={handleSubmit}>
+          <Button variant="filled" onClick={handleSubmit}>
             Submit
-          </button>
-        </div>
-      </div>
+          </Button>
+        </form>
+      </ContentBox>
     </div>
   );
 }
