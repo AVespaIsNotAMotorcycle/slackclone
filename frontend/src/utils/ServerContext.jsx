@@ -9,6 +9,7 @@ const MAXIMUM_REFRESH_TIME = 600000;
 const ServerContext = createContext();
 
 export function ServerContextProvider({ children }) {
+  const [serverName, setServerName] = useState('');
   const [server, setServer] = useState({});
   const [channels, setChannels] = useState([]);
   const [user, setUser] = useState('');
@@ -17,6 +18,15 @@ export function ServerContextProvider({ children }) {
   useEffect(() => {
     setTimeout(() => fetchServer('test_server'), refreshTimer);
   }, [server]);
+
+  const getUserServers = (username) => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${BACKEND_HOSTNAME}/user/servers`,
+      { params: { username } })
+        .then(({ data }) => { resolve(data); })
+        .catch((error) => { reject(error); });
+    });
+  };
 
   const signup = (username, password) => {
     return new Promise((resolve, reject) => {
@@ -67,7 +77,7 @@ export function ServerContextProvider({ children }) {
      .catch((error) => { console.error(error); });
   };
 
-  useEffect(() => { fetchServer(SERVER_NAME); }, [user]);
+  useEffect(() => { fetchServer(serverName); }, [serverName]);
 
   const value = {
     channels,
@@ -76,6 +86,9 @@ export function ServerContextProvider({ children }) {
     user,
     signup,
     login,
+    getUserServers,
+    serverName,
+    setServerName,
   };
 
   return (

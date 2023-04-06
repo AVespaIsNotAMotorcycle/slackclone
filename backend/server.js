@@ -51,6 +51,15 @@ app.get('/user/login', (request, response) => {
   else { response.send(401); }
 });
 
+app.get('/user/servers', (request, response) => {
+  const { username } = request.query;
+  const userServers = [];
+  Object.keys(SERVERS).forEach((server) => {
+    if (SERVERS[server].users.includes(username)) userServers.push(server);
+  });
+  response.send(userServers);
+});
+
 app.post('/user/signup', (request, response) => {
   const { username, password } = request.body.params;
   if (!username || typeof username !== 'string') throw new Error('username is not a truthy string');

@@ -6,13 +6,15 @@ import ChatView from '../ChatView';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
 import LogIn from '../LogIn';
+import Profile from '../Profile';
 
 import './App.css';
 
 function Content() {
   const [channel, setChannel] = useState('general');
-  const { user } = useContext(ServerContext);
+  const { user, serverName } = useContext(ServerContext);
   if (!user) return <LogIn />;
+  if (!serverName) return <Profile />;
   return (
       <div className="app">
         <Header />
