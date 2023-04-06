@@ -51,7 +51,8 @@
   color: white;
 }
 
-.button:hover {
+.button:hover,
+.button:focus {
   color: white;
   background-color: var(--button-hover-color);
 }
