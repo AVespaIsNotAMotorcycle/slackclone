@@ -48,6 +48,18 @@ app.get('/server/:servername', (request, response) => {
   }
 });
 
+app.post('/server/add_user', (request, response) => {
+  console.log('add_user');
+  const { servername, user } = request.body.params;
+  console.log(servername, user);
+  if (!user) throw new Error('user is falsy');
+  if (!servername) throw new Error('servername is falsy');
+  const server = SERVERS[servername];
+  if (!server) throw new Error('server is falsy');
+  if (!server.users.includes(user)) server.users.push(user);
+  response.send(server);
+});
+
 app.post('/server/create', (request, response) => {
   const { name, user } = request.body.params;
   if (!name || Object.keys(SERVERS).includes(name)) throw new Error('invalid name');

@@ -30,6 +30,15 @@ export function ServerContextProvider({ children }) {
     });
   };
 
+  const addUserToServer = (username) => {
+    return new Promise((resolve, reject) => {
+      axios.post(`${BACKEND_HOSTNAME}/server/add_user`,
+      { params: { servername: serverName, user: username }})
+        .then(({ data }) => { updateServer(data); })
+        .catch((error) => { reject(error); });
+    });
+  }
+
   const getUserServers = (username) => {
     return new Promise((resolve, reject) => {
       axios.get(`${BACKEND_HOSTNAME}/user/servers`,
@@ -104,6 +113,7 @@ export function ServerContextProvider({ children }) {
     serverName,
     setServerName,
     createServer,
+    addUserToServer,
   };
 
   return (

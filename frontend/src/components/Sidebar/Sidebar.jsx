@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.css';
 
 import ServerContext from '../../utils/ServerContext';
-import { Button } from '../Common';
+import { Button, TextField } from '../Common';
 
 function ServerName() {
   const { serverName } = useContext(ServerContext);
@@ -43,6 +43,30 @@ ChatList.propTypes = {
   setChannel: PropTypes.func.isRequired,
 };
 
+function UserList() {
+  const { server, addUserToServer } = useContext(ServerContext);
+  const users = server.users ? server.users : [];
+  const [invitee, setInvitee] = useState('');
+  return (
+    <div className="subsection">
+      Users
+      {users.map((user) => (
+        <Button key={user}>
+          {user}
+        </Button>
+      ))}
+      <TextField
+        label="Add person by username:"
+        id="add_user_to_server"
+        onChange={(e) => { setInvitee(e.target.value); }}
+      />
+      <Button onClick={() => { addUserToServer(invitee); }}>
+        Add User
+      </Button>
+    </div>
+  );
+}
+
 function Sidebar({ setChannel }) {
   return (
     <div className="sidebar">
@@ -51,6 +75,7 @@ function Sidebar({ setChannel }) {
       <ChatList
         setChannel={setChannel}
       />
+      <UserList />
     </div>
   );
 }
